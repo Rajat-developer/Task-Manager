@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import TaskForm from "./components/TaskForm";
+import TaskList from "./components/TaskList";
 
-function App() {
+const App = () => {
+  const [currentTask, setCurrentTask] = useState(null); 
+  const [refresh, setRefresh] = useState(false); 
+
+  const handleSave = () => {
+    setRefresh(!refresh); 
+    setCurrentTask(null); 
+  };
+
+  const handleEdit = (task) => {
+    setCurrentTask(task); 
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  
+      <div className="center-text">
+        <h1>Task Management</h1>
+        <TaskForm task={currentTask} onSave={handleSave} />
+        <TaskList key={refresh} onEdit={handleEdit} />
+      </div>
+  
   );
-}
+};
 
 export default App;
+
+
+

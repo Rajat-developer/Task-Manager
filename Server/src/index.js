@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 dbConnect();
 
 //Common route for createTask, UpdateTask, Get All Tasks
-app.use("/api/task", taskRoutes);
+app.use("/api/tasks", taskRoutes);
 
 //Start the server
 const PORT = process.env.PORT || 4001;
