@@ -1,2 +1,2 @@
 # Task-Manager
-Developed Task Manager Website using MERN Stack to manage tasks.
+Developed Task Manager Website using MERN Stack Technology to manage tasks.

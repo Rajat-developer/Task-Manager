@@ -1,47 +1,88 @@
 .task-list-container {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.column {
+  width: 30%;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.column h3 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+}
+
+.task-card {
+  padding: 15px;
+  margin: 10px 0;
+  background: #ffffff;
+  border-left: 5px solid #007bff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-header strong {
+  font-size: 1rem;
+  color: #333;
+}
+
+.task-card button {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: #fff;
+  border: none;
+  padding: 7px 12px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.task-card button:hover {
+  background: linear-gradient(135deg, #0056b3, #003f87);
+  transform: scale(1.1);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .task-list-container {
+    flex-direction: column;
+    gap: 15px;
   }
-  
+
   .column {
-    width: 30%;
+    width: 100%;
+  }
+
+  .form-container {
+    max-width: 100%;
+  }
+
+  .form-input, 
+  .form-textarea {
+    font-size: 0.9rem;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    min-height: 200px;
   }
-  
-  .column h3 {
-    margin-bottom: 10px;
+
+  .form-textarea {
+    height: 120px; 
   }
-  
-  .task-card {
-    padding: 10px;
-    margin: 5px 0;
-    background-color: #f4f4f4;
-    border-radius: 5px;
-  }
-  
-  .task-card .task-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .task-card .task-header strong {
-    font-weight: bold;
-  }
-  
-  .task-card button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  .task-card button:hover {
-    background-color: #0056b3;
-  }
-  
+}
