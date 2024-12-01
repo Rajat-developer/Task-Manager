@@ -7,7 +7,7 @@ const TaskForm = ({ task = null, onSave }) => {
   const [description, setDescription] = useState(""); 
   const [status, setStatus] = useState("Open"); 
   const [loading, setLoading] = useState(false); 
-  const [error, setError] = useState(""); // Error state
+  const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState(""); 
 
   // Update form fields
