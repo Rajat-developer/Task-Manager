@@ -1,0 +1,25 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  /* background: linear-gradient(135deg, #6a11cb, #2575fc);  */
+}
+
+.dashboard-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f4f4f4;
+  overflow-y: auto;
+  /* border-radius: 15px; */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+@media (min-width: 769px) {
+  .dashboard-container {
+    flex-direction: row;
+  }
+
+  .dashboard-content {
+    /* border-radius: 15px 0 0 15px; */
+  }
+}

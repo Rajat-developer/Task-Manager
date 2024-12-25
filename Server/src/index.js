@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const dbConnect = require("./db/dbConnect");
 const taskRoutes = require("./Routes/taskRoutes");
+const authRoutes =require("./Routes/authRoutes");
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,8 @@ dbConnect();
 
 //Common route for createTask, UpdateTask, Get All Tasks
 app.use("/api/tasks", taskRoutes);
+//Common route for login and signup
+app.use("/api/auth",authRoutes);
 
 //Start the server
 const PORT = process.env.PORT || 4001;

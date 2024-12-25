@@ -1,88 +1,116 @@
-.task-list-container {
+/* Main task board container */
+.task-board {
   display: flex;
-  justify-content: space-around;
   gap: 20px;
-}
-
-.column {
-  width: 30%;
   padding: 20px;
-  background: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  min-height: 100vh;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap; /* Ensures tasks wrap to the next row on smaller screens */
 }
 
-.column h3 {
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-  color: #333;
+/* Each task section */
+.task-section {
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Add spacing between tasks */
+}
+
+.task-section h3 {
   text-align: center;
+  color: #0056b3;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
 }
 
+/* Task list inside each section */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-height: 100px;
+}
+
+/* Individual task cards */
 .task-card {
-  padding: 15px;
-  margin: 10px 0;
-  background: #ffffff;
-  border-left: 5px solid #007bff;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column; /* Ensure content stacks vertically */
+  gap: 10px; /* Add spacing between title and description */
 }
 
 .task-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.task-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.task-header strong {
-  font-size: 1rem;
+.task-card h4 {
   color: #333;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden; /* Handle title overflow */
 }
 
-.task-card button {
-  background: linear-gradient(135deg, #007bff, #0056b3);
-  color: #fff;
-  border: none;
-  padding: 7px 12px;
+.task-card p {
+  margin: 0;
+  color: #666;
   font-size: 0.9rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  line-height: 1.4;
+  max-height: 4.2em; /* Limit height to 3 lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Display 3 lines and truncate */
+  -webkit-box-orient: vertical;
 }
 
-.task-card button:hover {
-  background: linear-gradient(135deg, #0056b3, #003f87);
-  transform: scale(1.1);
+/* Add a scrollable view for overflow */
+.task-card p:hover {
+  overflow: auto;
+  white-space: normal; /* Allow multiline text on hover */
 }
 
-/* Mobile Responsiveness */
+/* Responsive design */
 @media (max-width: 768px) {
-  .task-list-container {
+  .task-board {
     flex-direction: column;
     gap: 15px;
+    align-items: center;
   }
 
-  .column {
+  .task-section {
     width: 100%;
+    max-width: 400px;
   }
+}
 
-  .form-container {
-    max-width: 100%;
-  }
+/* Scrollbar customization for task description overflow */
+.task-card p::-webkit-scrollbar {
+  width: 5px;
+}
 
-  .form-input, 
-  .form-textarea {
-    font-size: 0.9rem;
-    padding: 10px;
-  }
+.task-card p::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 10px;
+}
 
-  .form-textarea {
-    height: 120px; 
-  }
+.task-card p::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
 }

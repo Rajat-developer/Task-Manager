@@ -1,92 +1,100 @@
 import React, { useEffect, useState } from "react";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import axios from "axios";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import "./TaskList.css"; 
+import "./TaskList.css";
 
-const TaskList = ({ onEdit }) => {
+const TaskList = () => {
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // Fetch tasks from the API
+  // Fetch tasks from the backend when the component mounts
   useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/api/tasks/getTask"); // Replace with your actual API endpoint
+        setTasks(response.data); // Update the state with the fetched tasks
+        setLoading(false);
+      } catch (err) {
+        setError(err.response?.data?.error || "Failed to fetch tasks.");
+        setLoading(false);
+      }
+    };
+
     fetchTasks();
   }, []);
 
-  const fetchTasks = async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/api/tasks/getTask");
-      setTasks(res.data);
-    } catch (err) {
-      console.error("Error fetching tasks:", err);
-    }
+  // Update task status
+  const updateTaskStatus = (taskId, newStatus) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === taskId ? { ...task, status: newStatus } : task
+      )
+    );
   };
 
-  const updateTaskStatus = async (id, newStatus) => {
-    try {
-      const task = tasks.find((task) => task._id === id);
-      await axios.put(`http://localhost:4000/api/tasks/updateTask/${id}`, {
-        ...task,
-        status: newStatus,
-      });
-      fetchTasks();
-    } catch (err) {
-      console.error("Error updating task status:", err);
-    }
-  };
+  // Render loading, error, or task board
+  if (loading) {
+    return <p>Loading tasks...</p>;
+  }
 
-  const handleDragEnd = (result) => {
-    if (!result.destination) return;
-
-    const { draggableId, destination } = result;
-    const newStatus = destination.droppableId;
-    updateTaskStatus(draggableId, newStatus);
-  };
+  if (error) {
+    return <p style={{ color: "red" }}>{error}</p>;
+  }
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="task-list-container">
+    <DndProvider backend={HTML5Backend}>
+      <div className="task-board">
         {["Open", "In-Progress", "Completed"].map((status) => (
-          <Droppable key={status} droppableId={status}>
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                className="column"
-              >
-                <h3>{status}</h3>
-                {tasks
-                  .filter((task) => task.status === status)
-                  .map((task, index) => (
-                    <Draggable key={task._id} draggableId={task._id} index={index}>
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="task-card"
-                          style={{
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          <div className="task-header">
-                            <strong>{task.title}</strong>
-                            <button
-                              onClick={() => onEdit(task)}
-                              className="edit-button"
-                            >
-                              Edit
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
+          <TaskSection
+            key={status}
+            status={status}
+            tasks={tasks.filter((task) => task.status === status)}
+            onDrop={(taskId) => updateTaskStatus(taskId, status)}
+          />
         ))}
       </div>
-    </DragDropContext>
+    </DndProvider>
+  );
+};
+
+const TaskSection = ({ status, tasks, onDrop }) => {
+  const [, dropRef] = useDrop({
+    accept: "TASK",
+    drop: (item) => onDrop(item.id),
+  });
+
+  return (
+    <div className="task-section" ref={dropRef}>
+      <h3>{status}</h3>
+      <div className="task-list">
+        {tasks.map((task) => (
+          <TaskCard key={task.id} task={task} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const TaskCard = ({ task }) => {
+  const [{ isDragging }, dragRef] = useDrag({
+    type: "TASK",
+    item: { id: task._id }, // Use `_id` if that's how your backend structures it
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  return (
+    <div
+      className="task-card"
+      ref={dragRef}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+    >
+      <h4>{task.title}</h4>
+      <p>{task.description}</p>
+    </div>
   );
 };
 

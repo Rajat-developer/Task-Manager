@@ -1,0 +1,113 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #007bff, #0056b3); /* Match landing page theme */
+}
+
+.login-form {
+  background: #fff;
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  transition: transform 0.3s ease;
+}
+
+.login-form:hover {
+  transform: scale(1.05); /* Subtle scaling on hover */
+}
+
+.login-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #0056b3; /* Match the primary color from landing page */
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #f9f9f9;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-form input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+.over-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-button {
+  background: #ff9800; /* Match the button style from landing page */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  /* width: 100%; */
+}
+
+.login-button:hover {
+  background: #e68900; /* Match hover effect from landing page */
+}
+
+.message {
+  margin-top: 15px;
+  text-align: center;
+  color: #28a745; /* Maintain success message color */
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.signup-link {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.signup-link a {
+  color: #007bff; /* Match link color from landing page */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .login-form {
+    padding: 30px;
+  }
+
+  .login-form h2 {
+    font-size: 1.8rem;
+  }
+
+  .login-form input {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .login-button {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+}

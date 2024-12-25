@@ -1,27 +1,62 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import LandingPage from "./components/LandingPage";
+import Login from "./components/Login";
+import SignupForm from "./components/SignupForm";
+import Dashboard from "./components/Dashboard";
+import UserProfile from "./components/UserProfile";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
-import "./App.css"; // Import the CSS file
 
 const App = () => {
-  const [currentTask, setCurrentTask] = useState(null);
-  const [refresh, setRefresh] = useState(false);
+  const [tasks, setTasks] = useState([]); // Centralized state for tasks
 
-  const handleSave = () => {
-    setRefresh(!refresh);
-    setCurrentTask(null);
+  // Handle task creation
+  const handleTaskCreated = (newTask) => {
+    setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
-  const handleEdit = (task) => {
-    setCurrentTask(task);
+  // Update existing task
+  const handleTaskUpdated = (updatedTask) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+    );
   };
 
   return (
-    <div>
-      <h1 className="center-text">Task Management</h1>
-      <TaskForm task={currentTask} onSave={handleSave} />
-      <TaskList key={refresh} onEdit={handleEdit} />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignupForm />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Dashboard tasks={tasks} />
+          }
+        />
+        <Route
+          path="/createTask"
+          element={
+            <TaskForm
+              onTaskCreated={handleTaskCreated}
+            />
+          }
+        />
+        <Route
+          path="/taskList"
+          element={
+            <TaskList
+              tasks={tasks}
+              setTasks={setTasks}
+              onTaskUpdated={handleTaskUpdated}
+            />
+          }
+        />
+        <Route path="/userProfile/:id" element={<UserProfile />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
   );
 };
 

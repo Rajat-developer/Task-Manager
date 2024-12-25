@@ -1,0 +1,51 @@
+.top-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #34495e, #2c3e50);
+  color: white;
+  padding: 15px 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.top-header h1 {
+  font-size: 20px;
+  margin: 0;
+  font-weight: bold;
+  text-align: center;
+}
+
+.top-header .user-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.top-header .user-info button {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s ease;
+}
+
+.top-header .user-info button:hover {
+  background: #c0392b;
+  transform: scale(1.05);
+}
+
+@media (min-width: 769px) {
+  .top-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .top-header .user-info {
+    margin-top: 0;
+  }
+}

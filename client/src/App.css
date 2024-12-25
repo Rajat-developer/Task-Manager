@@ -1,4 +1,24 @@
-.center-text {
-  text-align: center;
-  margin-top: 20px;
+/* styles.css */
+
+/* Reset some default browser styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Body Styling */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ecf0f1;
+  color: #333;
+}
+
+/* For mobile responsiveness */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
 }

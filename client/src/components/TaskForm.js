@@ -1,107 +1,106 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from "axios";
-import './TaskForm.css'; 
+import "./TaskForm.css";
 
-const TaskForm = ({ task = null, onSave }) => {
-  const [title, setTitle] = useState(""); 
-  const [description, setDescription] = useState(""); 
-  const [status, setStatus] = useState("Open"); 
-  const [loading, setLoading] = useState(false); 
+const TaskForm = ({ onTaskCreated, initialData }) => {
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [description, setDescription] = useState(initialData?.description || "");
+  const [status, setStatus] = useState(initialData?.status || "Open");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState(""); 
 
-  // Update form fields
-  useEffect(() => {
-    if (task) {
-      setTitle(task.title || "");
-      setDescription(task.description || "");
-      setStatus(task.status || "Open");
-    } else {
-      // Reset fields for new task
-      setTitle("");
-      setDescription("");
-      setStatus("Open");
-    }
-  }, [task]);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setSuccessMessage("");
-
-    const data = { title, description, status };
 
     try {
-      if (task && task._id) {
-        await axios.put(`http://localhost:4000/api/tasks/updateTask/${task._id}`, data);
-        setSuccessMessage("Task updated successfully!");
+      const response = await axios.post(
+        "http://localhost:4000/api/tasks/createTask",
+        { title, description, status },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        onTaskCreated && onTaskCreated(response.data.task); // Notify parent component if provided
+        setTitle("");
+        setDescription("");
+        setStatus("Open");
+
+        // Navigate to the TaskList page
+        navigate("/tasklist"); // Update the route based on your setup
       } else {
-        await axios.post(`http://localhost:4000/api/tasks/createTask`, data);
-        setSuccessMessage("Task created successfully!");
+        setError(response.data.message || "Failed to create task.");
       }
-      onSave(); // Notify parent component
     } catch (err) {
-      setError("Failed to save the task. Please try again.");
+      setError(err.response?.data?.message || "Something went wrong.");
     } finally {
       setLoading(false);
-      setTimeout(() => {
-        setSuccessMessage(""); // Hide success message after 2 seconds
-      }, 2000);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-container">
-      <h2 className="form-title">{task ? "Edit Task" : "Create Task"}</h2>
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleSubmit}>
+        <h2>{initialData ? "Update Task" : "Create Task"}</h2>
 
-      <div className="form-group">
-        <label className="form-label">Task Title:</label>
+        {error && <p style={{ color: "red", fontSize: "0.9rem" }}>{error}</p>}
+
         <input
           type="text"
-          placeholder="Enter task title"
+          placeholder="Task Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="form-input"
         />
-      </div>
 
-      <div className="form-group">
-        <label className="form-label">Task Description:</label>
         <textarea
-          placeholder="Enter task description"
+          placeholder="Task Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
-          className="form-textarea"
-        />
-      </div>
+          rows="4"
+          style={{
+            resize: "none",
+            fontFamily: "inherit",
+            fontSize: "1rem",
+          }}
+        ></textarea>
 
-      <div className="form-group">
-        <label className="form-label">Status:</label>
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          className="form-select"
+          required
+          style={{
+            width: "100%",
+            padding: "12px",
+            marginBottom: "20px",
+            border: "1px solid #ddd",
+            borderRadius: "8px",
+            fontSize: "1rem",
+            background: "#f9f9f9",
+            cursor: "pointer",
+          }}
         >
           <option value="Open">Open</option>
           <option value="In-Progress">In-Progress</option>
           <option value="Completed">Completed</option>
         </select>
-      </div>
 
-      {error && <p className="error-message">{error}</p>}
-      {successMessage && <p className="success-message">{successMessage}</p>}
-
-      <button
-        type="submit"
-        disabled={loading}
-        className=" create-task-button"
-      >
-        {loading ? "Saving..." : task ? "Update Task" : "Create Task"}
-      </button>
-    </form>
+        <div className="over-button">
+          <button className="login-button" type="submit" disabled={loading}>
+            {loading ? "Submitting..." : initialData ? "Update Task" : "Create Task"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
